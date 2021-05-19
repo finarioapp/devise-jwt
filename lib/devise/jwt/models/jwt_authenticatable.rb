@@ -10,13 +10,13 @@ module Devise
     # @see [Warden::JWTAuth::Interfaces::User]
     module JwtAuthenticatable
       extend ActiveSupport::Concern
-
-      class_methods do
+      module ClassMethods
         Devise::Models.config(self, :jwt_revocation_strategy)
       end
 
-      included do
-        def self.find_for_jwt_authentication(sub)
+
+      def self.find_for_jwt_authentication(sub)
+        base.class_eval do
           find(sub)
         end
       end
